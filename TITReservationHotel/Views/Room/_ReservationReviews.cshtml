@@ -1,0 +1,48 @@
+﻿@using TITReservationHotel.Models
+@model List<TITReservationHotel.Models.Reservation>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th>#</th>
+            <th>Room Types</th>
+            <th>Room Name</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Days</th>
+            <th>Cost</th>
+        </tr>
+        @foreach (Reservation reservation in Model)
+        {
+            <tr>
+                <td><a href="javascript:;" id="x" onclick="Delete(@reservation.Id)">x</a></td>
+                <td>@reservation.RoomType.Type</td>
+                <td>@reservation.Room.Name</td>
+                <td>@reservation.From.ToShortDateString()</td>
+                <td>@reservation.To.ToShortDateString()</td>
+                <td>@reservation.Days</td>
+                <td>@reservation.Cost</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    function Delete(id) {
+        debugger;
+        if (confirm("You are sure to delete this reservation")) {
+            $.ajax({
+                url = "http://localhost:2773/Room/Delete/" + id,
+                type: "POST",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+                success: function (result) {
+                    window.location();
+            },
+                error: function (errormessage) {
+                    debugger;
+                alert(errormessage.responseText);
+            }
+            });
+        }
+    }
+</script>

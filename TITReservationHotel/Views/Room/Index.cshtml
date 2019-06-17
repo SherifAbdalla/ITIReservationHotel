@@ -1,0 +1,52 @@
+﻿@model TITReservationHotel.Models.ViewModel.ReservationViewModel
+
+
+
+
+@using (Html.BeginForm("Reservation", "Room", FormMethod.Post, new { @style="margin:20px" }))
+{
+    <div class="form-group">
+        @Html.DropDownListFor(m => m.RoomType, ViewBag.RoomTypes as SelectList, "Select room type", new { onchange = "RoomTypeChange()", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.DropDownListFor(m => m.Room, ViewBag.Rooms as SelectList, "Select room", new { disabled = "disabled", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="From" >From: </label>
+        <input type="date" name="From" id="From" onchange="DateChange()" />
+    </div>
+
+    <div class="form-group">
+        <label for="To">To: </label>
+        <input type="date" name="To" id="To" onchange="DateChange()" />
+    </div>
+    <div class="form-group">
+        <label for="Days">Days: </label>
+        <input name="Days" id="Days" readonly class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="Cost">Cost: </label>
+        <input name="Cost" id="Cost" readonly class="form-control" />
+    </div>
+    @Html.ValidationSummary()
+    <input type="submit" value="Reservation" class="btn bg-primary"/>
+}
+
+
+@Html.Action("ReservationReviews")
+<script>
+    function RoomTypeChange()
+    {
+        if ($("#RoomType").val() > 0) {
+            $("#Room").removeAttr("disabled");
+        }
+        $("#Cost").val($("#Days").val() * $("#RoomType").val());
+    }
+    function DateChange() {
+        let from = new Date($("#From").val());
+        let to = new Date($("#To").val());
+        let days = to.getDate() - from.getDate();
+        $("#Days").val(days);
+        $("#Cost").val($("#Days").val() * $("#RoomType").val());
+    }
+</script>
